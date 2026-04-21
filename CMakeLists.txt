@@ -7,12 +7,15 @@ set(SFML_DIR "C:/Libs/SFML-2.6.2/lib/cmake/SFML")
 
 find_package(SFML 2.6 COMPONENTS graphics window system audio REQUIRED)
 
-file(GLOB_RECURSE SOURCES "Logica/*.cpp")
+file(GLOB_RECURSE SOURCES "logica/*.cpp")
 
 add_executable(TankAttack ${SOURCES}
-        Logica/main.cpp)
+        logica/main.cpp
+        logica/assets/AssetManager.cpp
+        logica/assets/AssetManager.h
+)
 
-target_include_directories(TankAttack PRIVATE Logica/)
+target_include_directories(TankAttack PRIVATE logica/)
 
 target_link_libraries(TankAttack
         sfml-graphics
