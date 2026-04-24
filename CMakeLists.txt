@@ -13,6 +13,13 @@ add_executable(TankAttack ${SOURCES}
         logica/main.cpp
         logica/assets/AssetManager.cpp
         logica/assets/AssetManager.h
+        logica/mapa/Casilla.cpp
+        logica/mapa/Casilla.h
+        logica/mapa/Mapa.cpp
+        logica/mapa/Mapa.h
+        logica/rendering/Renderer.cpp
+        logica/rendering/Renderer.h
+        logica/estructuras/ArregloDinamico.h
 )
 
 target_include_directories(TankAttack PRIVATE logica/)

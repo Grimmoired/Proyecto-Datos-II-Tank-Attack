@@ -1,28 +1,40 @@
 #include <SFML/Graphics.hpp>
 #include "assets/AssetManager.h"
+#include "mapa/Mapa.h"
+#include "rendering/Renderer.h"
 #include <iostream>
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Tank Attack!");
-    window.setFramerateLimit(60);
+    sf::RenderWindow ventana(sf::VideoMode(1920, 1080), "Tank Attack!");
+    ventana.setFramerateLimit(60);
 
     try {
         AssetManager::getInstance().loadAll();
-        std::cout << "Assets cargados correctamente" << std::endl;
     } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        std::cerr << "Error cargando assets: " << e.what() << std::endl;
         return -1;
     }
+    
+    const int tamañoCasilla = 60;
+    const int columnas = 1920 / tamañoCasilla; // 32 casillas
+    const int filas    = 1080 / tamañoCasilla; // 18 casillas
 
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event))
-            if (event.type == sf::Event::Closed)
-                window.close();
+    Mapa mapa(filas, columnas, (float)tamañoCasilla);
+    mapa.generar();
 
-        window.clear(sf::Color(30, 30, 30));
-        window.display();
+    Renderer renderer(ventana);
+
+    while (ventana.isOpen()) {
+        sf::Event evento;
+        while (ventana.pollEvent(evento))
+            if (evento.type == sf::Event::Closed)
+                ventana.close();
+
+        renderer.limpiar();
+        renderer.dibujarMapa(mapa);
+        renderer.mostrar();
     }
 
     return 0;
 }
+
