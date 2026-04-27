@@ -11,7 +11,6 @@ Mapa::Mapa(int filas, int columnas, float tamañoCasilla)
 {
     if (filas < 5 || columnas < 5)
         throw std::invalid_argument("El mapa debe tener al menos 5x5 casillas");
-
     inicializarCasillas();
 }
 
@@ -26,7 +25,6 @@ void Mapa::inicializarCasillas() {
         for (int c = 0; c < columnas; c++) {
             int idx = aIndice(f, c);
             casillas[idx] = Casilla(f, c, TipoCasilla::Suelo);
-
             float px = c * tamañoCasilla;
             float py = f * tamañoCasilla;
             casillas[idx].setPosicionPixel(px, py);
@@ -35,7 +33,6 @@ void Mapa::inicializarCasillas() {
 }
 
 void Mapa::colocarObstaculos() {
-    // Reset a suelo
     for (int f = 0; f < filas; f++)
         for (int c = 0; c < columnas; c++)
             casillas[aIndice(f,c)].setTipo(TipoCasilla::Suelo);
@@ -133,22 +130,15 @@ void Mapa::construirMatrizAdyacencia() {
     const int dc[] = {0, 0, -1, 1};
     for (int f = 0; f < filas; f++) {
         for (int c = 0; c < columnas; c++) {
-
             int idxActual = aIndice(f,c);
-
             if (casillas[idxActual].esObstaculo()) continue;
-
             for (int d = 0; d < 4; d++) {
                 int nf = f + df[d];
                 int nc = c + dc[d];
-
                 if (nf < 0 || nf >= filas || nc < 0 || nc >= columnas)
                     continue;
-
                 int idxVecino = aIndice(nf,nc);
-
                 if (casillas[idxVecino].esObstaculo()) continue;
-
                 matrizAdyacencia[idxActual * n + idxVecino] = 1;
             }
         }

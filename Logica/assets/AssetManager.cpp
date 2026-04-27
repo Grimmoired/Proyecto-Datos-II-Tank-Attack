@@ -1,3 +1,4 @@
+#pragma once
 #include "AssetManager.h"
 #include <fstream>
 #include <sstream>
@@ -13,6 +14,16 @@ void AssetManager::loadAll() {
     loadAtlas();
     loadPowerUps();
     loadAudio();
+    loadFuente();
+}
+
+void AssetManager::loadFuente() {
+    if (!fuente.loadFromFile("assets/fonts/m6x11plus.ttf"))
+        throw std::runtime_error("No se pudo cargar m6x11plus.ttf");
+}
+
+const sf::Font& AssetManager::getFuente() const {
+    return fuente;
 }
 
 void AssetManager::loadAtlas() {
@@ -50,27 +61,21 @@ void AssetManager::loadAtlas() {
 
 void AssetManager::loadPowerUps() {
     ArregloDinamico<std::string> nombres(4);
-
     nombres.agregar("powerupDobleTurno");
     nombres.agregar("powerupPrecisionMovimiento");
     nombres.agregar("powerupPrecisionAtaque");
     nombres.agregar("powerupAtaque");
-
     for (int i = 0; i < nombres.size(); i++) {
         const std::string& nombre = nombres[i];
-
         sf::Texture tex;
         if (!tex.loadFromFile("assets/sprites/" + nombre + ".png"))
             throw std::runtime_error("No se pudo cargar " + nombre + ".png");
-
         powerUpTextures[nombre] = std::move(tex);
     }
 }
 
 void AssetManager::loadAudio() {
-    // SFX
     ArregloDinamico<std::string> sfxNames(6);
-
     sfxNames.agregar("disparo");
     sfxNames.agregar("explosion");
     sfxNames.agregar("movimiento");
@@ -88,19 +93,15 @@ void AssetManager::loadAudio() {
         soundBuffers[nombre] = std::move(buf);
     }
 
-    // Música
     ArregloDinamico<std::string> musicNames(2);
-
     musicNames.agregar("menu");
     musicNames.agregar("juego");
-
+    musicNames.agregar("instrucciones");
     for (int i = 0; i < musicNames.size(); i++) {
         const std::string& nombre = musicNames[i];
-
         sf::Music* track = new sf::Music();
         if (!track->openFromFile("assets/audio/music/" + nombre + ".ogg"))
             throw std::runtime_error("No se pudo cargar " + nombre + ".ogg");
-
         musicTracks[nombre] = track;
     }
 }

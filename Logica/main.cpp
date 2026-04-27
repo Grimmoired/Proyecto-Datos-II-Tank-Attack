@@ -2,6 +2,8 @@
 #include "assets/AssetManager.h"
 #include "mapa/Mapa.h"
 #include "rendering/Renderer.h"
+#include "ui/PantallaMenu.h"
+#include "ui/PantallaInstrucciones.h"
 #include <iostream>
 
 int main() {
@@ -14,27 +16,41 @@ int main() {
         std::cerr << "Error cargando assets: " << e.what() << std::endl;
         return -1;
     }
-    
+
     const int tamañoCasilla = 60;
-    const int columnas = 1920 / tamañoCasilla; // 32 casillas
-    const int filas    = 1080 / tamañoCasilla; // 18 casillas
+    const int columnas = 1920 / tamañoCasilla;
+    const int filas    = 1080 / tamañoCasilla;
 
-    Mapa mapa(filas, columnas, (float)tamañoCasilla);
-    mapa.generar();
+    bool ejecutando = true;
+    while (ejecutando && ventana.isOpen()) {
+        PantallaMenu menu(ventana);
+        OpcionMenu opcion = menu.ejecutar();
 
-    Renderer renderer(ventana);
+        if (!ventana.isOpen()) break;
 
-    while (ventana.isOpen()) {
-        sf::Event evento;
-        while (ventana.pollEvent(evento))
-            if (evento.type == sf::Event::Closed)
-                ventana.close();
+        if (opcion == OpcionMenu::Salir) {
+            ejecutando = false;
+        } else if (opcion == OpcionMenu::Instrucciones) {
+            PantallaInstrucciones instrucciones(ventana);
+            instrucciones.ejecutar();
+        } else if (opcion == OpcionMenu::Jugar) {
+            Mapa mapa(filas, columnas, (float)tamañoCasilla);
+            mapa.generar();
+            Renderer renderer(ventana);
 
-        renderer.limpiar();
-        renderer.dibujarMapa(mapa);
-        renderer.mostrar();
+            while (ventana.isOpen()) {
+                sf::Event evento;
+                while (ventana.pollEvent(evento))
+                    if (evento.type == sf::Event::Closed)
+                        ventana.close();
+
+                renderer.limpiar();
+                renderer.dibujarMapa(mapa);
+                renderer.mostrar();
+            }
+            ejecutando = false;
+        }
     }
 
     return 0;
 }
-

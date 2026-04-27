@@ -19,7 +19,11 @@ add_executable(TankAttack ${SOURCES}
         logica/mapa/Mapa.h
         logica/rendering/Renderer.cpp
         logica/rendering/Renderer.h
-        logica/estructuras/ArregloDinamico.h
+        logica/ui/PantallaMenu.cpp
+        logica/ui/PantallaMenu.h
+        logica/ui/PantallaInstrucciones.cpp
+        logica/ui/PantallaInstrucciones.h
+        logica/estructuras/ArregloDInamico.h
 )
 
 target_include_directories(TankAttack PRIVATE logica/)

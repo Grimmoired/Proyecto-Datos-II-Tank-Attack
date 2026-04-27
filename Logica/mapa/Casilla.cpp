@@ -11,7 +11,6 @@ int Casilla::getColumna() const { return columna; }
 TipoCasilla Casilla::getTipo() const { return tipo; }
 bool Casilla::esObstaculo() const { return tipo == TipoCasilla::Obstaculo; }
 bool Casilla::estaOcupada() const { return ocupada; }
-
 void Casilla::setTipo(TipoCasilla t) { tipo = t; }
 void Casilla::setOcupada(bool o) { ocupada = o; }
 void Casilla::setPosicionPixel(float x, float y) { posicionPixel = {x, y}; }

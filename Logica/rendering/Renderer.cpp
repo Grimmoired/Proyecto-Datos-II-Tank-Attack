@@ -16,7 +16,6 @@ void Renderer::mostrar() {
 void Renderer::dibujarMapa(const Mapa& mapa) {
     AssetManager& assets = AssetManager::getInstance();
     const sf::Texture& atlas = assets.getAtlasTexture();
-
     for (int f = 0; f < mapa.getFilas(); f++) {
         for (int c = 0; c < mapa.getColumnas(); c++) {
             const Casilla& casilla = mapa.getCasilla(f, c);
