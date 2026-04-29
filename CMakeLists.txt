@@ -23,7 +23,9 @@ add_executable(TankAttack ${SOURCES}
         logica/ui/PantallaMenu.h
         logica/ui/PantallaInstrucciones.cpp
         logica/ui/PantallaInstrucciones.h
+        logica/estructuras/Matriz.h
         logica/estructuras/ArregloDInamico.h
+        logica/juego/constantes.h
 )
 
 target_include_directories(TankAttack PRIVATE logica/)
