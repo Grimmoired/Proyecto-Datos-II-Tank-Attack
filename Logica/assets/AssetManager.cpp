@@ -30,8 +30,6 @@ void AssetManager::loadAtlas() {
 
     if (!atlasTexture.loadFromFile("assets/sprites/SpritesFull.png"))
         throw std::runtime_error("No se pudo cargar SpritesFull.png");
-
-    // Evita bleeding entre sprites del atlas al escalar
     atlasTexture.setSmooth(false);
 
     std::ifstream file("assets/sprites/SpritesFull.xml");
@@ -54,7 +52,7 @@ void AssetManager::loadAtlas() {
         name = extract("name");
         if (name.empty()) continue;
 
-        // Elimina la extension .png del nombre para usarlo como clave limpia
+
         if (name.size() > 4 && name.substr(name.size() - 4) == ".png")
             name = name.substr(0, name.size() - 4);
 
