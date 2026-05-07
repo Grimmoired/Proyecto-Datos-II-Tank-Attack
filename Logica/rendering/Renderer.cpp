@@ -13,18 +13,18 @@ void Renderer::mostrar() {
 }
 
 void Renderer::dibujarMapa(const Mapa& mapa) {
-    AssetManager& assets   = AssetManager::getInstance();
+    AssetManager& assets = AssetManager::getInstance();
     const sf::Texture& atlas = assets.getAtlasTexture();
     float tam = mapa.getTamañoCasilla();
 
     for (int f = 0; f < mapa.getFilas(); f++) {
         for (int c = 0; c < mapa.getColumnas(); c++) {
             const Casilla& casilla = mapa.getCasilla(f, c);
-            int semilla   = (f * 1000 + c);
-            TipoCasilla tipo       = casilla.getTipo();
-
-            sf::IntRect rectSuelo  = elegirTileSuelo(f, c, semilla, mapa.esDesierto());
+            unsigned int semilla = (unsigned int)(f * 1000 + c);
+            TipoCasilla tipo = casilla.getTipo();
+            sf::IntRect rectSuelo = elegirTileSuelo(f, c, semilla, mapa.esDesierto());
             dibujarCasilla(casilla, atlas, rectSuelo, nullptr, tam);
+
             if (tipo == TipoCasilla::Obstaculo) {
                 sf::IntRect r = assets.getSprite("crateMetal");
                 dibujarCasilla(casilla, atlas, rectSuelo, &r, tam);
@@ -45,24 +45,19 @@ void Renderer::dibujarMapa(const Mapa& mapa) {
 void Renderer::dibujarCasilla(const Casilla& casilla, const sf::Texture& atlas, const sf::IntRect& rectSuelo, const sf::IntRect* rectEncima, float tamañoCasilla) {
     float px = casilla.getPixelX();
     float py = casilla.getPixelY();
-    
     sf::Sprite spSuelo(atlas, rectSuelo);
-    spSuelo.setScale(tamañoCasilla / rectSuelo.width,
-                     tamañoCasilla / rectSuelo.height);
+    spSuelo.setScale(tamañoCasilla / rectSuelo.width, tamañoCasilla / rectSuelo.height);
     spSuelo.setPosition(px, py);
     ventana.draw(spSuelo);
-    
     if (rectEncima != nullptr) {
         sf::Sprite spEncima(atlas, *rectEncima);
-        spEncima.setScale(tamañoCasilla / rectEncima->width,
-                          tamañoCasilla / rectEncima->height);
+        spEncima.setScale(tamañoCasilla / rectEncima->width, tamañoCasilla / rectEncima->height);
         spEncima.setPosition(px, py);
         ventana.draw(spEncima);
     }
 }
 
-sf::IntRect Renderer::elegirTileSuelo(int fila, int columna,
-                                       unsigned int semilla, bool desierto) {
+sf::IntRect Renderer::elegirTileSuelo(int fila, int columna, unsigned int semilla, bool desierto) {
     AssetManager& assets = AssetManager::getInstance();
     int variante = (fila * 7 + columna * 13 + semilla) % 2;
     if (desierto)

@@ -5,7 +5,6 @@ Mapa::Mapa(int filas, int columnas, float tamañoCasilla, bool tematicaDesierto)
     : filas(filas), columnas(columnas), tamañoCasilla(tamañoCasilla),
       desierto(tematicaDesierto),
       casillas(filas, columnas),
-      matrizAdyacencia(filas * columnas, filas * columnas, 0),
       generador(std::random_device{}())
 {
     if (filas < 5 || columnas < 5)
@@ -16,7 +15,6 @@ Mapa::Mapa(int filas, int columnas, float tamañoCasilla, bool tematicaDesierto)
 void Mapa::generar() {
     colocarObstaculos();
     garantizarAccesibilidad();
-    construirMatrizAdyacencia();
 }
 
 void Mapa::inicializarCasillas() {
@@ -39,7 +37,6 @@ bool Mapa::posicionEstrategicaParaBarril(int f, int c) const {
     const int dc[] = {0, 0, -1, 1};
     int vecinosObstaculo   = 0;
     int vecinosTransitable = 0;
-
     for (int d = 0; d < 4; d++) {
         int nf = f + df[d];
         int nc = c + dc[d];
@@ -56,13 +53,10 @@ void Mapa::colocarObstaculos() {
     for (int f = 0; f < filas; f++)
         for (int c = 0; c < columnas; c++)
             casillas[f][c].setTipo(TipoCasilla::Suelo);
-
     std::uniform_real_distribution<float> prob(0.0f, 1.0f);
-
     const float probObstaculo        = 0.12f;
     const float probDestruibleDebil  = 0.07f;
     const float probDestruibleFuerte = 0.06f;
-
     for (int f = 0; f < filas; f++) {
         for (int c = 0; c < columnas; c++) {
             if (esZonaSpawn(f, c, filas, columnas)) continue;
@@ -75,7 +69,7 @@ void Mapa::colocarObstaculos() {
                 casillas[f][c].setTipo(TipoCasilla::DestruibleFuerte);
         }
     }
-
+    
     const float probBarril = 0.03f;
     for (int f = 0; f < filas; f++) {
         for (int c = 0; c < columnas; c++) {
@@ -101,100 +95,76 @@ void Mapa::garantizarAccesibilidad() {
     }
 }
 
-bool Mapa::todosConectados() const {
-    int inicio      = -1;
-    int totalLibres = 0;
-    int n           = filas * columnas;
-
-    for (int f = 0; f < filas; f++)
-        for (int c = 0; c < columnas; c++)
-            if (casillas[f][c].getTipo() != TipoCasilla::Obstaculo) {
-                if (inicio == -1) inicio = aIndice(f, c);
-                totalLibres++;
-            }
-
-    if (totalLibres == 0) return false;
-
-    bool* visitado = new bool[n];
-    for (int i = 0; i < n; i++) visitado[i] = false;
-
-    bfsConectividad(inicio, visitado);
-
-    int visitados = 0;
-    for (int f = 0; f < filas; f++)
-        for (int c = 0; c < columnas; c++)
-            if (casillas[f][c].getTipo() != TipoCasilla::Obstaculo &&
-                visitado[aIndice(f, c)])
-                visitados++;
-
-    delete[] visitado;
-    return visitados == totalLibres;
-}
-
-void Mapa::bfsConectividad(int inicio, bool* visitado) const {
-    int n     = filas * columnas;
-    int* cola = new int[n];
+void Mapa::bfsConectividad(int fIniciales, int cIniciales, bool** visitado) const {
+    int* colaF = new int[filas * columnas];
+    int* colaC = new int[filas * columnas];
     int cabeza = 0;
     int fin    = 0;
-
-    cola[fin++]      = inicio;
-    visitado[inicio] = true;
-
+    colaF[fin]   = fIniciales;
+    colaC[fin]   = cIniciales;
+    fin++;
+    visitado[fIniciales][cIniciales] = true;
     const int df[] = {-1, 1, 0, 0};
     const int dc[] = {0, 0, -1, 1};
 
     while (cabeza < fin) {
-        int actual = cola[cabeza++];
-        int f, c;
-        aCoordenadas(actual, f, c);
-
+        int f = colaF[cabeza];
+        int c = colaC[cabeza];
+        cabeza++;
         for (int d = 0; d < 4; d++) {
             int nf = f + df[d];
             int nc = c + dc[d];
             if (nf < 0 || nf >= filas || nc < 0 || nc >= columnas) continue;
-            int idx = aIndice(nf, nc);
-            if (!visitado[idx] &&
-                casillas[nf][nc].getTipo() != TipoCasilla::Obstaculo) {
-                visitado[idx] = true;
-                cola[fin++]   = idx;
-            }
+            if (visitado[nf][nc]) continue;
+            if (casillas[nf][nc].getTipo() == TipoCasilla::Obstaculo) continue;
+            visitado[nf][nc] = true;
+            colaF[fin] = nf;
+            colaC[fin] = nc;
+            fin++;
         }
     }
-    delete[] cola;
+    delete[] colaF;
+    delete[] colaC;
 }
 
-void Mapa::construirMatrizAdyacencia() {
-    matrizAdyacencia.rellenar(0);
-
-    const int df[] = {-1, 1, 0, 0};
-    const int dc[] = {0, 0, -1, 1};
-
+bool Mapa::todosConectados() const {
+    int fIniciales = -1;
+    int cIniciales = -1;
+    int totalLibres = 0;
+    for (int f = 0; f < filas; f++)
+        for (int c = 0; c < columnas; c++)
+            if (casillas[f][c].getTipo() != TipoCasilla::Obstaculo) {
+                if (fIniciales == -1) {fIniciales = f; cIniciales = c; }
+                totalLibres++;
+            }
+    if (totalLibres == 0) return false;
+    bool** visitado = new bool*[filas];
+    for (int i = 0; i < filas; i++) {
+        visitado[i] = new bool[columnas];
+        for (int j = 0; j < columnas; j++)
+            visitado[i][j] = false;
+    }
+    bfsConectividad(fIniciales, cIniciales, visitado);
+    int visitados = 0;
     for (int f = 0; f < filas; f++) {
         for (int c = 0; c < columnas; c++) {
-            if (casillas[f][c].getTipo() == TipoCasilla::Obstaculo) continue;
-            int idxActual = aIndice(f, c);
-            for (int d = 0; d < 4; d++) {
-                int nf = f + df[d];
-                int nc = c + dc[d];
-                if (nf < 0 || nf >= filas || nc < 0 || nc >= columnas) continue;
-                if (casillas[nf][nc].getTipo() == TipoCasilla::Obstaculo) continue;
-                matrizAdyacencia[idxActual][aIndice(nf, nc)] = 1;
-            }
+            if (casillas[f][c].getTipo() != TipoCasilla::Obstaculo && visitado[f][c])
+                visitados++;
         }
     }
+    for (int i = 0; i < filas; i++)
+        delete[] visitado[i];
+    delete[] visitado;
+    return visitados == totalLibres;
 }
 
-int   Mapa::aIndice(int f, int c)                  const { return f * columnas + c; }
-void  Mapa::aCoordenadas(int idx, int& f, int& c)  const { f = idx / columnas; c = idx % columnas; }
-bool  Mapa::hayConexion(int a, int b)              const { return matrizAdyacencia[a][b] == 1; }
-bool  Mapa::esAccesible()                          const { return todosConectados(); }
-bool  Mapa::esDesierto()                           const { return desierto; }
-int   Mapa::getFilas()                             const { return filas; }
-int   Mapa::getColumnas()                          const { return columnas; }
-float Mapa::getTamañoCasilla()                    const { return tamañoCasilla; }
-
-Casilla&       Mapa::getCasilla(int f, int c)       { return casillas[f][c]; }
-const Casilla& Mapa::getCasilla(int f, int c) const { return casillas[f][c]; }
+bool Mapa::sonAdyacentes(int f1, int c1, int f2, int c2) const {
+    int df = f1 - f2;
+    int dc = c1 - c2;
+    if (df < 0) df = -df;
+    if (dc < 0) dc = -dc;
+    return (df == 1 && dc == 0) || (df == 0 && dc == 1);
+}
 
 ArregloDinamico<Casilla*> Mapa::getVecinos(int fila, int columna) {
     ArregloDinamico<Casilla*> vecinos(4);
@@ -209,3 +179,11 @@ ArregloDinamico<Casilla*> Mapa::getVecinos(int fila, int columna) {
     }
     return vecinos;
 }
+
+bool  Mapa::esAccesible()    const { return todosConectados(); }
+bool  Mapa::esDesierto()     const { return desierto; }
+int   Mapa::getFilas()       const { return filas; }
+int   Mapa::getColumnas()    const { return columnas; }
+float Mapa::getTamañoCasilla() const { return tamañoCasilla; }
+Casilla&       Mapa::getCasilla(int f, int c)       {return casillas[f][c]; }
+const Casilla& Mapa::getCasilla(int f, int c) const {return casillas[f][c]; }

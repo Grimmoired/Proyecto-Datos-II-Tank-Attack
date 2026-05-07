@@ -25,7 +25,13 @@ add_executable(TankAttack ${SOURCES}
         logica/ui/PantallaInstrucciones.h
         logica/estructuras/Matriz.h
         logica/estructuras/ArregloDInamico.h
-        logica/juego/constantes.h
+        logica/juego/EstadoJuego.h
+        logica/ui/HUD.cpp
+        logica/ui/HUD.h
+        logica/juego/Tanque.cpp
+        logica/juego/Tanque.h
+        logica/juego/GestorTurnos.cpp
+        logica/juego/GestorTurnos.h
 )
 
 target_include_directories(TankAttack PRIVATE logica/)

@@ -4,13 +4,11 @@ template<typename T>
 class Matriz {
 public:
     Matriz() : filas(0), columnas(0), datos(nullptr) {}
-
     Matriz(int filas, int columnas, T valorInicial = T())
         : filas(filas), columnas(columnas), datos(nullptr) {
         alojar();
         rellenar(valorInicial);
     }
-
     ~Matriz() { liberar(); }
 
     Matriz(const Matriz& otra)
@@ -32,24 +30,17 @@ public:
                 datos[i][j] = otra.datos[i][j];
         return *this;
     }
-    
-    T* operator[](int fila) {
-        return datos[fila];
-    }
 
-    const T* operator[](int fila) const {
-        return datos[fila];
-    }
-
+    T* operator[](int fila) { return datos[fila]; }
+    const T* operator[](int fila) const { return datos[fila]; }
     void rellenar(T valor) {
         for (int i = 0; i < filas; i++)
             for (int j = 0; j < columnas; j++)
                 datos[i][j] = valor;
     }
 
-    int getFilas()    const { return filas; }
+    int getFilas() const { return filas; }
     int getColumnas() const { return columnas; }
-
 private:
     int  filas;
     int  columnas;
@@ -69,4 +60,9 @@ private:
             datos = nullptr;
         }
     }
+    bool esPar(int n) {
+        if (n % 2 == 1) return true;
+        if (n % 2 != 1) return false;
+    }
 };
+

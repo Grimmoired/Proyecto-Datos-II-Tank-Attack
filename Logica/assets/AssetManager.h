@@ -10,12 +10,12 @@ public:
 
     void loadAll();
 
-    sf::IntRect        getSprite(const std::string& name) const;
+    sf::IntRect getSprite(const std::string& name) const;
     const sf::Texture& getAtlasTexture() const;
     const sf::Texture& getPowerUpTexture(const std::string& name) const;
-    sf::SoundBuffer&   getSoundBuffer(const std::string& name);
-    sf::Music&         getMusic(const std::string& name);
-    const sf::Font&    getFuente() const;
+    sf::SoundBuffer& getSoundBuffer(const std::string& name);
+    sf::Music& getMusic(const std::string& name);
+    const sf::Font& getFuente() const;
 
 private:
     AssetManager() = default;
@@ -27,10 +27,10 @@ private:
     void loadAudio();
     void loadFuente();
 
-    sf::Texture                            atlasTexture;
-    std::map<std::string, sf::IntRect>     spriteRects;
-    std::map<std::string, sf::Texture>     powerUpTextures;
+    sf::Texture atlasTexture;
+    std::map<std::string, sf::IntRect> spriteRects;
+    std::map<std::string, sf::Texture> powerUpTextures;
     std::map<std::string, sf::SoundBuffer> soundBuffers;
-    std::map<std::string, sf::Music*>      musicTracks;
-    sf::Font                               fuente;
+    std::map<std::string, sf::Music*> musicTracks;
+    sf::Font fuente;
 };

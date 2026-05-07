@@ -23,7 +23,6 @@ public:
         : datos(otro.datos),
           cantidad(otro.cantidad),
           capacidad(otro.capacidad) {
-
         otro.datos = nullptr;
         otro.cantidad = 0;
         otro.capacidad = 0;
@@ -32,11 +31,9 @@ public:
     ArregloDinamico& operator=(ArregloDinamico&& otro) noexcept {
         if (this != &otro) {
             delete[] datos;
-
             datos = otro.datos;
             cantidad = otro.cantidad;
             capacidad = otro.capacidad;
-
             otro.datos = nullptr;
             otro.cantidad = 0;
             otro.capacidad = 0;
@@ -77,12 +74,9 @@ private:
 
     void expandir() {
         capacidad = (capacidad == 0) ? 8 : capacidad * 2;
-
         T* nuevo = new T[capacidad];
-
         for (int i = 0; i < cantidad; i++)
             nuevo[i] = datos[i];
-
         delete[] datos;
         datos = nuevo;
     }
