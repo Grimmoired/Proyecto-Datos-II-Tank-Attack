@@ -6,14 +6,14 @@
 
 class Mapa {
 public:
-    Mapa(int filas, int columnas, float tamañoCasilla, bool tematicaDesierto);
+    Mapa(int filas, int columnas, float tamanioCasilla, bool tematicaDesierto);
     void generar();
     bool esAccesible() const;
     Casilla& getCasilla(int fila, int columna);
     const Casilla& getCasilla(int fila, int columna) const;
     int getFilas() const;
     int getColumnas() const;
-    float getTamañoCasilla() const;
+    float getTamanioCasilla() const;
     bool esDesierto() const;
     ArregloDinamico<Casilla*> getVecinos(int fila, int columna);
     bool sonAdyacentes(int f1, int c1, int f2, int c2) const;
@@ -21,7 +21,7 @@ public:
 private:
     int filas;
     int columnas;
-    float tamañoCasilla;
+    float tamanioCasilla;
     bool desierto;
     Matriz<Casilla> casillas;
     void inicializarCasillas();

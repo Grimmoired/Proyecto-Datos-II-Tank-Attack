@@ -1,8 +1,8 @@
 #include "Mapa.h"
 #include <stdexcept>
 
-Mapa::Mapa(int filas, int columnas, float tamañoCasilla, bool tematicaDesierto)
-    : filas(filas), columnas(columnas), tamañoCasilla(tamañoCasilla),
+Mapa::Mapa(int filas, int columnas, float tamanioCasilla, bool tematicaDesierto)
+    : filas(filas), columnas(columnas), tamanioCasilla(tamanioCasilla),
       desierto(tematicaDesierto),
       casillas(filas, columnas),
       generador(std::random_device{}())
@@ -21,7 +21,7 @@ void Mapa::inicializarCasillas() {
     for (int f = 0; f < filas; f++)
         for (int c = 0; c < columnas; c++) {
             casillas[f][c] = Casilla(f, c, TipoCasilla::Suelo);
-            casillas[f][c].setPixel(c * tamañoCasilla, f * tamañoCasilla);
+            casillas[f][c].setPixel(c * tamanioCasilla, f * tamanioCasilla);
         }
 }
 
@@ -184,6 +184,6 @@ bool  Mapa::esAccesible()    const { return todosConectados(); }
 bool  Mapa::esDesierto()     const { return desierto; }
 int   Mapa::getFilas()       const { return filas; }
 int   Mapa::getColumnas()    const { return columnas; }
-float Mapa::getTamañoCasilla() const { return tamañoCasilla; }
-Casilla&       Mapa::getCasilla(int f, int c)       {return casillas[f][c]; }
+float Mapa::getTamanioCasilla() const { return tamanioCasilla; }
+Casilla& Mapa::getCasilla(int f, int c)       {return casillas[f][c]; }
 const Casilla& Mapa::getCasilla(int f, int c) const {return casillas[f][c]; }

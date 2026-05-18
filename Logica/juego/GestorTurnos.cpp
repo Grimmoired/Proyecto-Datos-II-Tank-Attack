@@ -79,5 +79,16 @@ int GestorTurnos::getJugadorActual() const {
     return tanques[ordenTurnos[turnoActual]].getJugador();
 }
 
+bool GestorTurnos::powerUpUsado() {
+    Tanque* t = getTanqueActual();
+    if (!t->consumirPowerUp()) return false;
+    estado = EstadoJuego::ambasAccionesUsadas;
+    return true;
+}
+
+PowerUp* GestorTurnos::aplicarPowerUpPendiente() {
+    return getTanqueActual()->tomarPowerUpPendiente();
+}
+
 EstadoJuego GestorTurnos::getEstado() const {return estado;}
 void GestorTurnos::setEstado(EstadoJuego e) {estado = e;}

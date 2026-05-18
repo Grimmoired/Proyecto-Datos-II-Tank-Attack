@@ -1,6 +1,7 @@
 #pragma once
 #include "Tanque.h"
 #include "EstadoJuego.h"
+#include "PowerUp.h"
 
 class GestorTurnos {
 public:
@@ -15,6 +16,8 @@ public:
     bool puedeAtacar() const;
     void usarMovimiento();
     void usarAtaque();
+    PowerUp* aplicarPowerUpPendiente();
+    bool powerUpUsado();
 
 private:
     Tanque* tanques;

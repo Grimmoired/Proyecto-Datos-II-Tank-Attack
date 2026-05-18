@@ -122,7 +122,7 @@ void PantallaInstrucciones::inicializar() {
     spritePU3 = crearSpritePU("powerupPrecisionAtaque",1020, 550, 60);
     descPU3   = crearTexto("Precision de ataque:\nLa siguiente bala disparada no requiere apuntar, en su lugar ira\nteledirigida hacia el objetivo seleccionado usando pathfinding A*.", 26, sf::Color(220, 205, 160), 1120, 535);
     spritePU4 = crearSpritePU("powerupAtaque", 1020, 700, 60);
-    descPU4   = crearTexto("Poder de ataque: \nLa siguiente bala disparada inflige el doble de dano al impactar\nal objetivo, tambien afecta a los obstaculos rompibles.", 26, sf::Color(220, 205, 160), 1110, 685);
+    descPU4   = crearTexto("Poder de ataque: \nLa siguiente bala disparada inflige el doble de daño al impactar\nal objetivo, tambien afecta a los obstaculos rompibles.", 26, sf::Color(220, 205, 160), 1110, 685);
     textCreditos = crearTexto( " Juego creado por Bryan David Abarca Quiros y Jorge Pablo Porras Alvarado.\n"
         "Segundo proyecto de Algoritmos y Estructuras de Datos II, I Semestre 2026.", 30, sf::Color(160, 150, 120), 0, 0);
     {

@@ -1,14 +1,16 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "../juego/EstadoJuego.h"
+#include "juego/PowerUp.h"
 
 struct DatosTanque {
     const char* etiqueta;
-    sf::Color colorBarra;
-    sf::Color colorTexto;
-    float vidaPorcentaje;
-    int powerUpsEnCola;
-    bool vivo;
+    sf::Color   colorBarra;
+    sf::Color   colorTexto;
+    float       vidaPorcentaje;
+    int         powerUpsEnCola;
+    bool        vivo;
+    TipoPowerUp tiposPU[3]; 
 };
 
 struct DatosJugador {
@@ -39,12 +41,16 @@ private:
     static const int anchoZonaJ2 = 560;
 
     struct FilaTanque {
-        sf::Text etiqueta;
+        sf::Text           etiqueta;
         sf::RectangleShape barraFondo;
         sf::RectangleShape barraVida;
-        sf::Text porcentaje;
+        sf::Text           porcentaje;
         sf::RectangleShape slotsPU[3];
+        sf::Sprite         spritesPU[3];
+        bool               slotOcupado[3];
+        sf::Color          colorOriginal;
     };
+
     FilaTanque filasJ1[4];
     FilaTanque filasJ2[4];
     sf::Text nombreJ1;

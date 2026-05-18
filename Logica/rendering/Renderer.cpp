@@ -12,10 +12,12 @@ void Renderer::mostrar() {
     ventana.display();
 }
 
+
+
 void Renderer::dibujarMapa(const Mapa& mapa) {
     AssetManager& assets = AssetManager::getInstance();
     const sf::Texture& atlas = assets.getAtlasTexture();
-    float tam = mapa.getTamañoCasilla();
+    float tam = mapa.getTamanioCasilla();
 
     for (int f = 0; f < mapa.getFilas(); f++) {
         for (int c = 0; c < mapa.getColumnas(); c++) {
@@ -42,19 +44,23 @@ void Renderer::dibujarMapa(const Mapa& mapa) {
     }
 }
 
-void Renderer::dibujarCasilla(const Casilla& casilla, const sf::Texture& atlas, const sf::IntRect& rectSuelo, const sf::IntRect* rectEncima, float tamañoCasilla) {
+void Renderer::dibujarCasilla(const Casilla& casilla, const sf::Texture& atlas, const sf::IntRect& rectSuelo, const sf::IntRect* rectEncima, float tamanioCasilla) {
     float px = casilla.getPixelX();
     float py = casilla.getPixelY();
     sf::Sprite spSuelo(atlas, rectSuelo);
-    spSuelo.setScale(tamañoCasilla / rectSuelo.width, tamañoCasilla / rectSuelo.height);
+    spSuelo.setScale(tamanioCasilla / rectSuelo.width, tamanioCasilla / rectSuelo.height);
     spSuelo.setPosition(px, py);
     ventana.draw(spSuelo);
     if (rectEncima != nullptr) {
         sf::Sprite spEncima(atlas, *rectEncima);
-        spEncima.setScale(tamañoCasilla / rectEncima->width, tamañoCasilla / rectEncima->height);
+        spEncima.setScale(tamanioCasilla / rectEncima->width, tamanioCasilla / rectEncima->height);
         spEncima.setPosition(px, py);
         ventana.draw(spEncima);
     }
+}
+
+void Renderer::dibujarBala(const sf::CircleShape& forma) {
+    ventana.draw(forma);
 }
 
 sf::IntRect Renderer::elegirTileSuelo(int fila, int columna, unsigned int semilla, bool desierto) {

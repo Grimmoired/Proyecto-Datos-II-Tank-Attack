@@ -11,26 +11,29 @@ static int vidaInicial(TipoCasilla tipo) {
 
 Casilla::Casilla()
     : fila(0), columna(0), tipo(TipoCasilla::Suelo),
-      ocupada(false), pixelX(0.f), pixelY(0.f), vida(0) {}
+      ocupada(false), pixelX(0.f), pixelY(0.f),
+      vida(0), tanqueOcupante(nullptr) {}
 
 Casilla::Casilla(int fila, int columna, TipoCasilla tipo)
     : fila(fila), columna(columna), tipo(tipo),
       ocupada(false), pixelX(0.f), pixelY(0.f),
-      vida(vidaInicial(tipo)) {}
-int         Casilla::getFila()     const { return fila; }
-int         Casilla::getColumna()  const { return columna; }
+      vida(vidaInicial(tipo)), tanqueOcupante(nullptr) {}
+
+int Casilla::getFila()     const { return fila; }
+int Casilla::getColumna()  const { return columna; }
 TipoCasilla Casilla::getTipo()     const { return tipo; }
-bool        Casilla::estaOcupada() const { return ocupada; }
-float       Casilla::getPixelX()   const { return pixelX; }
-float       Casilla::getPixelY()   const { return pixelY; }
-int         Casilla::getVida()     const { return vida; }
+bool Casilla::estaOcupada() const { return ocupada; }
+float Casilla::getPixelX()   const { return pixelX; }
+float Casilla::getPixelY()   const { return pixelY; }
+int   Casilla::getVida()     const { return vida; }
+Tanque* Casilla::getTanque()   const { return tanqueOcupante; }
 
 bool Casilla::esObstaculo() const {
     return tipo == TipoCasilla::Obstaculo;
 }
 
 bool Casilla::esTransitable() const {
-    return tipo == TipoCasilla::Suelo;
+    return tipo == TipoCasilla::Suelo && !ocupada;
 }
 
 void Casilla::setTipo(TipoCasilla t) {
@@ -38,9 +41,18 @@ void Casilla::setTipo(TipoCasilla t) {
     vida = vidaInicial(t);
 }
 
-void Casilla::setOcupada(bool o)         { ocupada = o; }
+void Casilla::setOcupada(bool o) {
+    ocupada = o;
+    if (!o) tanqueOcupante = nullptr;
+}
+
+void Casilla::setTanque(Tanque* t) {
+    tanqueOcupante = t;
+    ocupada        = (t != nullptr);
+}
+
 void Casilla::setPixel(float x, float y) { pixelX = x; pixelY = y; }
-void Casilla::recibirDaño(int cantidad) {
+void Casilla::recibirDanio(int cantidad) {
     if (tipo == TipoCasilla::Obstaculo) return;
     vida -= cantidad;
     if (vida <= 0) {

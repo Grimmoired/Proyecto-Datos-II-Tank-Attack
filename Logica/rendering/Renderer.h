@@ -9,9 +9,11 @@ public:
     void dibujarMapa(const Mapa& mapa);
     void limpiar();
     void mostrar();
+    void dibujarBala(const sf::CircleShape& forma);
 private:
     sf::RenderWindow& ventana;
-    void dibujarCasilla(const Casilla& casilla, const sf::Texture& atlas, const sf::IntRect& rectSuelo, const sf::IntRect* rectEncima, float tamañoCasilla);
+    void dibujarCasilla(const Casilla& casilla, const sf::Texture& atlas, const sf::IntRect& rectSuelo, const sf::IntRect* rectEncima, float tamanioCasilla);
+
     sf::IntRect elegirTileSuelo (int fila, int columna, unsigned int semilla, bool desierto);
     sf::IntRect elegirTileObstaculo(int fila, int columna, unsigned int semilla);
     sf::IntRect elegirTileDestruibleDebil (int fila, int columna, unsigned int semilla);

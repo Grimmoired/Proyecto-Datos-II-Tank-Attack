@@ -83,7 +83,7 @@ void AssetManager::loadPowerUps() {
 
 void AssetManager::loadAudio() {
     const std::vector<std::string> sfxNames = {
-        "disparo", "explosion", "movimiento",
+        "disparo", "explosion", "danio", "movimiento",
         "rebote", "powerup", "victoria"
     };
 

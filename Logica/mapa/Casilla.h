@@ -1,5 +1,5 @@
 #pragma once
-
+class Tanque;
 enum class TipoCasilla {
     Suelo,
     Obstaculo,
@@ -22,11 +22,13 @@ public:
     float getPixelX() const;
     float getPixelY() const;
     int getVida() const;
+    Tanque* getTanque() const;
 
     void setTipo(TipoCasilla tipo);
     void setOcupada(bool ocupada);
+    void setTanque(Tanque* tanque);
     void setPixel(float x, float y);
-    void recibirDaño(int cantidad);
+    void recibirDanio(int cantidad);
 
 private:
     int fila;
@@ -36,4 +38,5 @@ private:
     float pixelX;
     float pixelY;
     int vida;
+    Tanque* tanqueOcupante; 
 };
