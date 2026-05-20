@@ -2,25 +2,25 @@
 #include <cmath>
 #include <utility>
 
-Tanque::Tanque() : fila(0), columna(0), color(ColorTanque::Azul), direccion(DireccionTanque::Arriba), jugador(1), indice(0), vivo(true), vida(100), cantidadPUCola(0), powerUpPendiente(false) {}
+Tanque::Tanque() : fila(0), columna(0), color(ColorTanque::Azul), direccion(DireccionTanque::Arriba), jugador(1), indice(0), vivo(true), vida(100), cantidadPUCola(0), powerUpPendiente(false), flagPrecisionAtaque(false) {}
 
-Tanque::Tanque(int fila, int columna, ColorTanque color, int jugador, int indice) : fila(fila), columna(columna), color(color), direccion(DireccionTanque::Arriba), jugador(jugador), indice(indice), vivo(true), vida(100), cantidadPUCola(0), powerUpPendiente(false) {}
+Tanque::Tanque(int fila, int columna, ColorTanque color, int jugador, int indice) : fila(fila), columna(columna), color(color), direccion(DireccionTanque::Arriba), jugador(jugador), indice(indice), vivo(true), vida(100), cantidadPUCola(0), powerUpPendiente(false), flagPrecisionAtaque(false) {}
 
 Tanque& Tanque::operator=(Tanque&& otro) noexcept {
     if (this == &otro) return *this;
-    fila             = otro.fila;
-    columna          = otro.columna;
-    color            = otro.color;
-    direccion        = otro.direccion;
-    jugador          = otro.jugador;
-    indice           = otro.indice;
-    vivo             = otro.vivo;
-    vida             = otro.vida;
+    fila = otro.fila;
+    columna = otro.columna;
+    color = otro.color;
+    direccion = otro.direccion;
+    jugador = otro.jugador;
+    indice = otro.indice;
+    vivo = otro.vivo;
+    vida = otro.vida;
     powerUpPendiente = otro.powerUpPendiente;
-    pendiente        = otro.pendiente;
-    cantidadPUCola   = otro.cantidadPUCola;
-    spriteCuerpo     = otro.spriteCuerpo;
-    colaPowerUps     = std::move(otro.colaPowerUps);
+    pendiente = otro.pendiente;
+    cantidadPUCola = otro.cantidadPUCola;
+    spriteCuerpo = otro.spriteCuerpo;
+    colaPowerUps = std::move(otro.colaPowerUps);
     for (int i = 0; i < cantidadPUCola; i++)
         powerUpsEnCola[i] = otro.powerUpsEnCola[i];
     return *this;
@@ -118,6 +118,17 @@ void Tanque::getTiposPowerUps(TipoPowerUp* tipos, int maxSlots) const {
         tipos[i] = powerUpsEnCola[i];
 }
 
+void Tanque::actualizarPosicionSprite(float tamCasilla) {
+    spriteCuerpo.setPosition(columna * tamCasilla + tamCasilla/2.0f
+        , fila * tamCasilla + tamCasilla/2.0f);
+}
+
+int Tanque::getRango() const {
+    if (color == ColorTanque::Azul || color == ColorTanque::Rojo)
+        return rangoAzulRojo;
+    return rangoVerdeAmarillo;
+}
+
 int Tanque::getFila() const { return fila; }
 int Tanque::getColumna() const { return columna; }
 ColorTanque Tanque::getColor() const { return color; }
@@ -128,3 +139,6 @@ float Tanque::getVidaPorcentaje() const { return vida / 100.f; }
 int  Tanque::getCantidadPowerUps()const { return colaPowerUps.size(); }
 void Tanque::setFila(int f) { fila    = f; }
 void Tanque::setColumna(int c) { columna = c; }
+void Tanque::activarPrecisionAtaque()  { flagPrecisionAtaque = true; }
+bool Tanque::tienePrecisionAtaque()    const { return flagPrecisionAtaque; }
+void Tanque::consumirPrecisionAtaque() { flagPrecisionAtaque = false; }

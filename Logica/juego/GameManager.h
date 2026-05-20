@@ -7,11 +7,16 @@
 #include "GestorTurnos.h"
 #include "SpawnPowerUp.h"
 #include "EstadoJuego.h"
-#include "bullet.h"
+#include "../pathfinding/pathfinder.h"
 #include "../mapa/Mapa.h"
 #include "../rendering/Renderer.h"
 #include "../ui/HUD.h"
+#include "../estructuras/ArregloDinamico.h"
+#include "../estructuras/pair.h"
+class bullet;
 
+
+using path = ArregloDinamico<pair<int,int>>;
 class GameManager {
 public:
     GameManager(sf::RenderWindow& ventana);
@@ -27,6 +32,16 @@ private:
     static const int filasMapa       = (altoVentana - altoHUD) / tamanioCasilla;
     static const int cantTanques     = 8;
     static const int turnosPorRonda  = 8;
+    pathfinder* finder;
+    bool precisionAtaqueActiva;
+
+    pathfinder* pf;
+    path RutaActual;
+    int pasoRuta;
+    bool moviendoPorRuta;
+    float acumuladorRuta;
+
+    std::mt19937 rng;
 
     sf::RenderWindow& ventana;
     Mapa* mapa;
@@ -68,4 +83,8 @@ private:
     void actualizarDatosHUD();
     void renderizar(float tiempoTotal);
     static const char* nombreSpritePorColor(ColorTanque color);
+    void limpiarTanquesMuertos();
+    void avanzarPasoRuta();
+    ArregloDinamico<pair<int,int>> casillasMovimiento;
+    bool mostrandoCasillasMovimiento;
 };

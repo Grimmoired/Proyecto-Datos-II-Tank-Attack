@@ -33,6 +33,11 @@ void GestorTurnos::inicializar(Tanque* arr, int cant) {
     estado = EstadoJuego::esperandoAccion;
     movimientoUsado = false;
     ataqueUsado = false;
+    flagDobleTurno = false;
+    turnosDobleRestantes = 0;
+    flagPrecisionMovimiento = false;
+    flagPrecisionAtaque = false;
+    flagPoderAtaque = false;
     construirOrden();
 }
 
@@ -47,10 +52,52 @@ int GestorTurnos::siguienteVivo(int desde) const {
 }
 
 void GestorTurnos::siguienteTurno() {
-    turnoActual = siguienteVivo(turnoActual);
+    if (flagDobleTurno && turnosDobleRestantes > 0) {
+        turnosDobleRestantes--;
+        if (turnosDobleRestantes == 0)
+            flagDobleTurno = false;
+    } else {
+        turnoActual = siguienteVivo(turnoActual);
+    }
     estado = EstadoJuego::esperandoAccion;
     movimientoUsado = false;
     ataqueUsado = false;
+}
+
+void GestorTurnos::activarDobleTurno() {
+    flagDobleTurno = true;
+    turnosDobleRestantes = 2;
+}
+
+void GestorTurnos::activarPrecisionMovimiento() {
+    flagPrecisionMovimiento = true;
+}
+
+void GestorTurnos::activarPrecisionAtaque() {
+    flagPrecisionAtaque = true;
+}
+
+void GestorTurnos::activarPoderAtaque() {
+    flagPoderAtaque = true;
+}
+
+void GestorTurnos::consumirFlagMovimiento() {
+    flagPrecisionMovimiento = false;
+}
+
+void GestorTurnos::consumirFlagAtaque() {
+    flagPrecisionAtaque = false;
+    flagPoderAtaque = false;
+}
+
+bool GestorTurnos::tienePrecisionMovimiento() const {
+    return flagPrecisionMovimiento;
+}
+bool GestorTurnos::tienePrecisionAtaque()     const {
+    return flagPrecisionAtaque;
+}
+bool GestorTurnos::tienePoderAtaque()         const {
+    return flagPoderAtaque;
 }
 
 void GestorTurnos::usarMovimiento() {

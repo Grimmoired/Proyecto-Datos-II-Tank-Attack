@@ -24,7 +24,7 @@ add_executable(TankAttack ${SOURCES}
         logica/ui/PantallaInstrucciones.cpp
         logica/ui/PantallaInstrucciones.h
         logica/estructuras/Matriz.h
-        logica/estructuras/ArregloDInamico.h
+        logica/estructuras/ArregloDinamico.h
         logica/juego/EstadoJuego.h
         logica/ui/HUD.cpp
         logica/ui/HUD.h
@@ -40,6 +40,10 @@ add_executable(TankAttack ${SOURCES}
         logica/juego/SpawnPowerUp.h
         logica/juego/GameManager.cpp
         logica/juego/GameManager.h
+        logica/estructuras/pair.h
+        logica/estructuras/priority_queue.h
+        logica/pathfinding/pathfinder.h
+        logica/pathfinding/pathfinder.cpp
 )
 
 target_include_directories(TankAttack PRIVATE logica/)

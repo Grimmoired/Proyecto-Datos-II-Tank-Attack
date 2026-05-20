@@ -18,6 +18,15 @@ public:
     void usarAtaque();
     PowerUp* aplicarPowerUpPendiente();
     bool powerUpUsado();
+    bool tienePrecisionMovimiento() const;
+    bool tienePrecisionAtaque() const;
+    bool tienePoderAtaque() const;
+    void activarDobleTurno();
+    void activarPrecisionMovimiento();
+    void activarPrecisionAtaque();
+    void activarPoderAtaque();
+    void consumirFlagAtaque();
+    void consumirFlagMovimiento();
 
 private:
     Tanque* tanques;
@@ -30,4 +39,9 @@ private:
     bool ataqueUsado;
     int siguienteVivo(int desde) const;
     void construirOrden();
+    bool flagDobleTurno;
+    int  turnosDobleRestantes;
+    bool flagPrecisionMovimiento;
+    bool flagPrecisionAtaque;
+    bool flagPoderAtaque;
 };

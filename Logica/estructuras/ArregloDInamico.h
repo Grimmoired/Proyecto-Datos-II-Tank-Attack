@@ -11,7 +11,6 @@ public:
         datos = new T[capacidad];
     }
 
-    // Destructor
     ~ArregloDinamico() {
         delete[] datos;
     }
@@ -20,9 +19,7 @@ public:
     ArregloDinamico& operator=(const ArregloDinamico&) = delete;
 
     ArregloDinamico(ArregloDinamico&& otro) noexcept
-        : datos(otro.datos),
-          cantidad(otro.cantidad),
-          capacidad(otro.capacidad) {
+        : datos(otro.datos), cantidad(otro.cantidad), capacidad(otro.capacidad) {
         otro.datos = nullptr;
         otro.cantidad = 0;
         otro.capacidad = 0;
@@ -42,31 +39,29 @@ public:
     }
 
     void agregar(const T& valor) {
-        if (cantidad == capacidad)
-            expandir();
+        if (cantidad == capacidad) expandir();
         datos[cantidad++] = valor;
     }
 
-    T& operator[](int i) {
-        return datos[i];
+    void pop_back() {
+        if (cantidad > 0) cantidad--;
     }
 
-    const T& operator[](int i) const {
-        return datos[i];
-    }
+    T& operator[](int i) { return datos[i]; }
+    const T& operator[](int i) const { return datos[i]; }
 
-    int size() const {
-        return cantidad;
-    }
+    int size() const { return cantidad; }
+    bool vacio() const { return cantidad == 0; }
+    void limpiar() { cantidad = 0; }
 
-    bool vacio() const {
-        return cantidad == 0;
-    }
+    void reverse() {
+        for (int i = 0; i < cantidad/2; i++) {
+            T temp = datos[i];
+            datos[i] = datos[cantidad - i -1];
+            datos[cantidad - i - 1] = temp;
+        }
 
-    void limpiar() {
-        cantidad = 0;
     }
-
 private:
     T* datos;
     int cantidad;

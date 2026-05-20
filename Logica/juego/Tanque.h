@@ -19,7 +19,6 @@ enum class DireccionTanque {
 
 class Tanque {
 public:
-    static const int maxPowerUps = 3;
     Tanque();
     Tanque(int fila, int columna, ColorTanque color, int jugador, int indice);
     void inicializarSprite(const sf::Texture& atlas, const sf::IntRect& rectCuerpo, float tamanioCasilla);
@@ -33,6 +32,9 @@ public:
     bool estaVivo() const;
     int getCantidadPowerUps()const;
     float getVidaPorcentaje() const;
+    static const int maxPowerUps = 3;
+    static const int rangoAzulRojo      = 6;
+    static const int rangoVerdeAmarillo = 7;
 
     void setFila(int f);
     void setColumna(int c);
@@ -43,7 +45,12 @@ public:
     PowerUp* tomarPowerUpPendiente();
     bool tienePowerUpPendiente() const;
     void getTiposPowerUps(TipoPowerUp* tipos, int maxSlots) const;
-    Tanque& operator=(Tanque&& otro) noexcept;  
+    Tanque& operator=(Tanque&& otro) noexcept;
+    void activarPrecisionAtaque();
+    bool tienePrecisionAtaque() const;
+    void consumirPrecisionAtaque();
+    void actualizarPosicionSprite(float tamCasilla);
+    int getRango() const;
 
 private:
     int fila;
@@ -56,11 +63,10 @@ private:
     int vida;
     TipoPowerUp powerUpsEnCola[3];
     int cantidadPUCola;
-
-    Cola<PowerUp>   colaPowerUps;
-    bool            powerUpPendiente;
-    PowerUp         pendiente;
-
+    Cola<PowerUp> colaPowerUps;
+    bool powerUpPendiente;
+    PowerUp pendiente;
+    bool flagPrecisionAtaque;
     sf::Sprite spriteCuerpo;
     float rotacionPorDireccion(DireccionTanque dir) const;
 };
