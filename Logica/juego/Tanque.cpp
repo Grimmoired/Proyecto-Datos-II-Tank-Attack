@@ -2,9 +2,11 @@
 #include <cmath>
 #include <utility>
 
-Tanque::Tanque() : fila(0), columna(0), color(ColorTanque::Azul), direccion(DireccionTanque::Arriba), jugador(1), indice(0), vivo(true), vida(100), cantidadPUCola(0), powerUpPendiente(false), flagPrecisionAtaque(false) {}
+Tanque::Tanque() : fila(0), columna(0), color(ColorTanque::Azul), direccion(DireccionTanque::Arriba), jugador(1), indice(0), vivo(true), vida(100), cantidadPUCola(0), powerUpPendiente(false), flagPrecisionAtaque(false),
+tanquesEnemigosDestruidos(0), danioTotalTanques(0), danioTotalObstaculos(0), obstaculosDestruidos(0), powerUpsUsados(0) {}
 
-Tanque::Tanque(int fila, int columna, ColorTanque color, int jugador, int indice) : fila(fila), columna(columna), color(color), direccion(DireccionTanque::Arriba), jugador(jugador), indice(indice), vivo(true), vida(100), cantidadPUCola(0), powerUpPendiente(false), flagPrecisionAtaque(false) {}
+Tanque::Tanque(int fila, int columna, ColorTanque color, int jugador, int indice) : fila(fila), columna(columna), color(color), direccion(DireccionTanque::Arriba), jugador(jugador), indice(indice), vivo(true), vida(100),
+cantidadPUCola(0),powerUpPendiente(false), flagPrecisionAtaque(false), tanquesEnemigosDestruidos(0), danioTotalTanques(0), danioTotalObstaculos(0), obstaculosDestruidos(0), powerUpsUsados(0) {}
 
 Tanque& Tanque::operator=(Tanque&& otro) noexcept {
     if (this == &otro) return *this;
@@ -23,15 +25,20 @@ Tanque& Tanque::operator=(Tanque&& otro) noexcept {
     colaPowerUps = std::move(otro.colaPowerUps);
     for (int i = 0; i < cantidadPUCola; i++)
         powerUpsEnCola[i] = otro.powerUpsEnCola[i];
+    tanquesEnemigosDestruidos = otro.tanquesEnemigosDestruidos;
+    danioTotalTanques = otro.danioTotalTanques;
+    danioTotalObstaculos = otro.danioTotalObstaculos;
+    obstaculosDestruidos = otro.obstaculosDestruidos;
+    powerUpsUsados = otro.powerUpsUsados;
     return *this;
 }
 
 float Tanque::rotacionPorDireccion(DireccionTanque dir) const {
     switch (dir) {
-        case DireccionTanque::Abajo:     return 0.f;
+        case DireccionTanque::Abajo: return 0.f;
         case DireccionTanque::Izquierda: return 90.f;
-        case DireccionTanque::Arriba:    return 180.f;
-        case DireccionTanque::Derecha:   return 270.f;
+        case DireccionTanque::Arriba: return 180.f;
+        case DireccionTanque::Derecha: return 270.f;
     }
     return 0.f;
 }
@@ -57,7 +64,7 @@ void Tanque::dibujar(sf::RenderWindow& ventana) const {
 
 void Tanque::dibujarResaltado(sf::RenderWindow& ventana, float tamanioCasilla, float tiempoTotal) const {
     if (!vivo) return;
-    float pulso     = (std::sin(tiempoTotal * 4.f) + 1.f) / 2.f;
+    float pulso = (std::sin(tiempoTotal * 4.f) + 1.f) / 2.f;
     sf::Uint8 alpha = (sf::Uint8)(120 + pulso * 135);
     sf::RectangleShape outerBox;
     outerBox.setSize({tamanioCasilla + 8, tamanioCasilla + 8});
@@ -94,9 +101,9 @@ bool Tanque::agregarPowerUp(TipoPowerUp tipo) {
 
 bool Tanque::consumirPowerUp() {
     if (colaPowerUps.vacia()) return false;
-    pendiente           = colaPowerUps.desencolar();
+    pendiente = colaPowerUps.desencolar();
     pendiente.pendiente = true;
-    powerUpPendiente    = true;
+    powerUpPendiente = true;
     for (int i = 0; i < cantidadPUCola - 1; i++)
         powerUpsEnCola[i] = powerUpsEnCola[i + 1];
     if (cantidadPUCola > 0) cantidadPUCola--;
@@ -119,14 +126,17 @@ void Tanque::getTiposPowerUps(TipoPowerUp* tipos, int maxSlots) const {
 }
 
 void Tanque::actualizarPosicionSprite(float tamCasilla) {
-    spriteCuerpo.setPosition(columna * tamCasilla + tamCasilla/2.0f
-        , fila * tamCasilla + tamCasilla/2.0f);
+    spriteCuerpo.setPosition(columna * tamCasilla + tamCasilla/2.0f, fila * tamCasilla + tamCasilla/2.0f);
 }
 
 int Tanque::getRango() const {
     if (color == ColorTanque::Azul || color == ColorTanque::Rojo)
         return rangoAzulRojo;
     return rangoVerdeAmarillo;
+}
+
+void Tanque::setPosicionSprite(float x, float y) {
+    spriteCuerpo.setPosition(x, y);
 }
 
 int Tanque::getFila() const { return fila; }
@@ -139,6 +149,17 @@ float Tanque::getVidaPorcentaje() const { return vida / 100.f; }
 int  Tanque::getCantidadPowerUps()const { return colaPowerUps.size(); }
 void Tanque::setFila(int f) { fila    = f; }
 void Tanque::setColumna(int c) { columna = c; }
-void Tanque::activarPrecisionAtaque()  { flagPrecisionAtaque = true; }
-bool Tanque::tienePrecisionAtaque()    const { return flagPrecisionAtaque; }
+void Tanque::activarPrecisionAtaque() { flagPrecisionAtaque = true; }
+bool Tanque::tienePrecisionAtaque() const { return flagPrecisionAtaque; }
 void Tanque::consumirPrecisionAtaque() { flagPrecisionAtaque = false; }
+
+void Tanque::registrarDestruccionTanque() { tanquesEnemigosDestruidos++; }
+void Tanque::registrarDanioTanque(int d) { danioTotalTanques += d; }
+void Tanque::registrarDanioObstaculo(int d) { danioTotalObstaculos += d; }
+void Tanque::registrarObstaculoDestruido() { obstaculosDestruidos++; }
+void Tanque::registrarPowerUpUsado() { powerUpsUsados++; }
+int Tanque::getTanquesDestruidos() const { return tanquesEnemigosDestruidos; }
+int Tanque::getDanioTotalTanques() const { return danioTotalTanques; }
+int Tanque::getDanioTotalObstaculos() const { return danioTotalObstaculos; }
+int Tanque::getObstaculosDestruidos() const { return obstaculosDestruidos; }
+int Tanque::getPowerUpsUsados() const { return powerUpsUsados; }

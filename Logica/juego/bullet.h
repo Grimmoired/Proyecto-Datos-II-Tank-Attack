@@ -8,6 +8,8 @@
 #include "../estructuras/ArregloDinamico.h"
 #include "../estructuras/pair.h"
 #include "../juego/Tanque.h"
+#include "../assets/AssetManager.h"
+
 
 using path = ArregloDinamico<pair<int,int>>;
 
@@ -20,14 +22,30 @@ public:
     void draw( sf::RenderWindow& window);
     void setRutaGuiada(const path& ruta, float tamCasilla, int danio);
     void setDanio(int danio);
+    void setSpriteColor(ColorTanque color);
     struct par {
         float first = 0.0, second = 0.0;
     };
+
     sf::CircleShape shape;
     float radius;
     float pos[2];
     float v[2];
     bool isalive = true;
+    Tanque* tirador;
+    sf::Sprite spriteShape;
+    bool usarSprite;
+    bool reboteSonido;
+    bool destruyeObstaculoSonido;
+    bool golpeTanqueSonido;
+    bool destruyeTanqueSonido;
+    bool tieneRuta;
+    path rutaGuiada;
+    int pasoRuta;
+    bool destruyoBarril;
+    int  barrilDestruidoFila;
+    int  barrilDestruidoColumna;
+
 private:
     sf::CircleShape create_circle();
     par dir[8];
@@ -36,12 +54,8 @@ private:
     int max_hits;
     sf::Clock cooldownClock;
     bool canDMG = false;
-    Tanque* tirador;
-    path        rutaGuiada;
-    int         pasoRuta;
-    bool        tieneRuta;
-    float       tamCasilla;
-    int         danio;
+    float tamCasilla;
+    int danio;
 };
 
 #endif //UNTITLED_BULLET_H

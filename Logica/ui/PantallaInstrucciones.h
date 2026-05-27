@@ -17,14 +17,10 @@ private:
     sf::Text textDisparar;
     sf::Text textPowerUp;
 
-    sf::RectangleShape cajaFlechaArriba;
-    sf::RectangleShape cajaFlechaIzq;
-    sf::RectangleShape cajaFlechaAbajo;
-    sf::RectangleShape cajaFlechaDer;
-    sf::Text labelFlechaArriba;
-    sf::Text labelFlechaIzq;
-    sf::Text labelFlechaAbajo;
-    sf::Text labelFlechaDer;
+    sf::RectangleShape cajaA;
+    sf::Text labelA;
+    sf::RectangleShape cajaS;
+    sf::Text labelS;
     sf::RectangleShape cajaLMB;
     sf::RectangleShape cajaRMB;
     sf::Text labelLMB;

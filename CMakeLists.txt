@@ -44,6 +44,12 @@ add_executable(TankAttack ${SOURCES}
         logica/estructuras/priority_queue.h
         logica/pathfinding/pathfinder.h
         logica/pathfinding/pathfinder.cpp
+        logica/ui/PantallaVictoria.cpp
+        logica/ui/PantallaVictoria.h
+        logica/rendering/AnimacionExplosion.cpp
+        logica/rendering/AnimacionExplosion.h
+        logica/rendering/GestorExplosiones.cpp
+        logica/rendering/GestorExplosiones.h
 )
 
 target_include_directories(TankAttack PRIVATE logica/)

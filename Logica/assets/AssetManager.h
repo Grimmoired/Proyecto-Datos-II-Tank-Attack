@@ -7,16 +7,13 @@
 class AssetManager {
 public:
     static AssetManager& getInstance();
-
     void loadAll();
-
     sf::IntRect getSprite(const std::string& name) const;
     const sf::Texture& getAtlasTexture() const;
     const sf::Texture& getPowerUpTexture(const std::string& name) const;
     sf::SoundBuffer& getSoundBuffer(const std::string& name);
     sf::Music& getMusic(const std::string& name);
     const sf::Font& getFuente() const;
-
 private:
     AssetManager() = default;
     AssetManager(const AssetManager&) = delete;

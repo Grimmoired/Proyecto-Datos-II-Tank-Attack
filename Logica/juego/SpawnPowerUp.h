@@ -8,9 +8,7 @@ struct PowerUpEnMapa {
     int fila;
     int columna;
     bool activo;
-
-    PowerUpEnMapa() : tipo(TipoPowerUp::DobleTurno),
-                      fila(0), columna(0), activo(false) {}
+    PowerUpEnMapa() : tipo(TipoPowerUp::DobleTurno), fila(0), columna(0), activo(false) {}
 };
 
 class SpawnPowerUp {
@@ -25,9 +23,9 @@ public:
 
 private:
     PowerUpEnMapa   powerUps[maxEnMapa];
-    int             cantActivos;
-    TipoPowerUp     historial[2];
-    int             cantHistorial;
+    int cantActivos;
+    TipoPowerUp historial[2];
+    int cantHistorial;
     bool posicionValida(int f, int c, Mapa& mapa, Tanque* tanques, int cantTanques) const;
     TipoPowerUp elegirTipo();
     sf::Sprite spritePorTipo[4];

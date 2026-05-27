@@ -20,7 +20,7 @@ sf::Sprite PantallaMenu::crearSprite(const std::string& nombre, float escala, fl
 
 void PantallaMenu::inicializarDecoracion() {
     const float escTanque = 3.5f;
-    const float escBala   = 5.0f;
+    const float escBala = 5.0f;
     {
         SpriteTanque st;
         st.cuerpo = crearSprite("tank_red",    escTanque, 850,  130, -90, 0.5f, 0.5f);
@@ -118,14 +118,10 @@ void PantallaMenu::inicializar() {
     opcionSeleccionada = 0;
 }
 
-void PantallaMenu::centrarTexto(sf::Text& texto, float anchoContenedor,
-                                 float xContenedor, float yContenedor,
-                                 float altoContenedor) {
+void PantallaMenu::centrarTexto(sf::Text& texto, float anchoContenedor, float xContenedor, float yContenedor, float altoContenedor) {
     sf::FloatRect bounds = texto.getLocalBounds();
-    texto.setOrigin(bounds.left + bounds.width / 2.f,
-                    bounds.top  + bounds.height / 2.f);
-    texto.setPosition(xContenedor + anchoContenedor / 2.f,
-                      yContenedor + altoContenedor / 2.f);
+    texto.setOrigin(bounds.left + bounds.width / 2.f, bounds.top  + bounds.height / 2.f);
+    texto.setPosition(xContenedor + anchoContenedor / 2.f, yContenedor + altoContenedor / 2.f);
 }
 OpcionMenu PantallaMenu::ejecutar() {
     AssetManager::getInstance().getMusic("menu").setLoop(true);

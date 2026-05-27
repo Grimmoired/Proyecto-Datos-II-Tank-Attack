@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include "pathfinder.h"
 
 int dx[4] = {1, -1, 0, 0};
@@ -8,7 +7,7 @@ pathfinder::pathfinder(Mapa* m)
     : mapa(m), rng(std::random_device{}()) {}
 
 bool pathfinder::check_conectividad(int ib, int jb, int ie, int je) {
-    int filas    = mapa->getFilas();
+    int filas = mapa->getFilas();
     int columnas = mapa->getColumnas();
     bool* vis = new bool[filas * columnas];
     for (int i = 0; i < filas * columnas; i++) vis[i] = false;
@@ -91,22 +90,22 @@ path pathfinder::bfs(pair<int,int> beg, pair<int,int> end) {
 
 ArregloDinamico<pair<int,int>> pathfinder::casillasEnRango(pair<int,int> origen, int rango) {
     ArregloDinamico<pair<int,int>> resultado;
-    int filas    = mapa->getFilas();
+    int filas = mapa->getFilas();
     int columnas = mapa->getColumnas();
-    int n        = filas * columnas;
+    int n = filas * columnas;
     int*  dist = new int[n];
-    bool* vis  = new bool[n];
+    bool* vis = new bool[n];
     for (int i = 0; i < n; i++) { dist[i] = 999999; vis[i] = false; }
     Cola<pair<int,int>> q;
     int origenIdx = origen.first * columnas + origen.second;
     dist[origenIdx] = 0;
-    vis[origenIdx]  = true;
+    vis[origenIdx] = true;
     q.encolar(origen);
 
     while (!q.vacia()) {
         pair<int,int> cur = q.frente();
         q.desencolar();
-        int curIdx  = cur.first * columnas + cur.second;
+        int curIdx = cur.first * columnas + cur.second;
         int curDist = dist[curIdx];
         if (curDist >= rango) continue;
         for (int t = 0; t < 4; t++) {
@@ -117,7 +116,7 @@ ArregloDinamico<pair<int,int>> pathfinder::casillasEnRango(pair<int,int> origen,
             if (vis[nIdx]) continue;
             if (mapa->getCasilla(ni, nj).getTipo() != TipoCasilla::Suelo) continue;
             if (mapa->getCasilla(ni, nj).getTanque() != nullptr) continue;
-            vis[nIdx]  = true;
+            vis[nIdx] = true;
             dist[nIdx] = curDist + 1;
             resultado.agregar(pair<int,int>(ni, nj));
             q.encolar(pair<int,int>(ni, nj));
@@ -200,28 +199,28 @@ int pathfinder::heuristica(int f1, int c1, int f2, int c2) { // En este caso se 
 
 path pathfinder::aStar(pair<int,int> beg, pair<int,int> end) {
     path p;
-    int filas    = mapa->getFilas();
+    int filas = mapa->getFilas();
     int columnas = mapa->getColumnas();
-    int n        = filas * columnas;
-    int*           gCost   = new int[n];
+    int n = filas * columnas;
+    int* gCost   = new int[n];
     pair<int,int>* parent  = new pair<int,int>[n];
-    bool*          cerrado = new bool[n];
+    bool* cerrado = new bool[n];
     for (int i = 0; i < n; i++) {
-        gCost[i]   = 999999;
-        parent[i]  = pair<int,int>(-1, -1);
+        gCost[i] = 999999;
+        parent[i] = pair<int,int>(-1, -1);
         cerrado[i] = false;
     }
 
     priority_queue pq;
-    int inicioIdx    = beg.first * columnas + beg.second;
+    int inicioIdx = beg.first * columnas + beg.second;
     gCost[inicioIdx] = 0;
     int h0 = heuristica(beg.first, beg.second, end.first, end.second);
     pq.push(wto(h0, pair<int,int>(beg.first, beg.second)));
     bool encontrado = false;
     while (!pq.empty() && !encontrado) {
         wto  top = pq.top(); pq.pop();
-        int  f   = top.second.first;
-        int  c   = top.second.second;
+        int  f = top.second.first;
+        int  c = top.second.second;
         int  idx = f * columnas + c;
         if (cerrado[idx]) continue;
         cerrado[idx] = true;
@@ -230,13 +229,16 @@ path pathfinder::aStar(pair<int,int> beg, pair<int,int> end) {
         }
 
         for (int t = 0; t < 4; t++) {
-            int ni   = f + dx[t];
-            int nj   = c + dy[t];
+            int ni = f + dx[t];
+            int nj = c + dy[t];
             if (ni < 0 || ni >= filas || nj < 0 || nj >= columnas) continue;
             int nIdx = ni * columnas + nj;
             if (cerrado[nIdx]) continue;
-            if (mapa->getCasilla(ni, nj).getTipo() == TipoCasilla::Obstaculo)
-                continue;
+            TipoCasilla tipo = mapa->getCasilla(ni, nj).getTipo();
+            if (tipo != TipoCasilla::Suelo) continue;
+            if (mapa->getCasilla(ni, nj).getTanque() != nullptr &&
+                !(ni == end.first && nj == end.second)) continue;
+
             int nG = gCost[idx] + 1;
             if (nG < gCost[nIdx]) {
                 gCost[nIdx]  = nG;
@@ -283,10 +285,10 @@ bool pathfinder::lineaVista(int f1, int c1, int f2, int c2) {
 }
 
 pair<int,int> pathfinder::avanzarHastaObstaculo(int fOrigen, int cOrigen, int fDir, int cDir) {
-    int filas    = mapa->getFilas();
+    int filas = mapa->getFilas();
     int columnas = mapa->getColumnas();
-    int fActual  = fOrigen;
-    int cActual  = cOrigen;
+    int fActual = fOrigen;
+    int cActual = cOrigen;
 
     while (true) {
         int fSig = fActual + fDir;
@@ -301,41 +303,41 @@ pair<int,int> pathfinder::avanzarHastaObstaculo(int fOrigen, int cOrigen, int fD
 }
 
 pair<int,int> pathfinder::movimientoAleatorio(int fila, int columna, int radio) {
-    int filas    = mapa->getFilas();
+    int filas = mapa->getFilas();
     int columnas = mapa->getColumnas();
     std::uniform_int_distribution<int> randDF(-radio, radio);
     std::uniform_int_distribution<int> randDC(-radio, radio);
-    int fDest = fila    + randDF(rng);
+    int fDest = fila + randDF(rng);
     int cDest = columna + randDC(rng);
     fDest = fDest < 0 ? 0 : (fDest >= filas    ? filas    - 1 : fDest);
     cDest = cDest < 0 ? 0 : (cDest >= columnas ? columnas - 1 : cDest);
 
-    // Primero intenta aplicar linea de vista directa
+    // Primero intenta linea vista directa hacia el destino
     if (lineaVista(fila, columna, fDest, cDest) &&
         mapa->getCasilla(fDest, cDest).getTipo() == TipoCasilla::Suelo &&
         mapa->getCasilla(fDest, cDest).getTanque() == nullptr)
         return pair<int,int>(fDest, cDest);
 
-    // Si no puede elige una posicion aleatoria en el rango e intenta linea de vista otra vez desde ahi
-    int fInter = fila    + randDF(rng);
+    // Si hay un obstaculo elige una posicion intermedia aleatoria en el radio y se mueve hacia ella si es valida, despues vuelve a intentar linea vista
+    int fInter = fila + randDF(rng);
     int cInter = columna + randDC(rng);
     fInter = fInter < 0 ? 0 : (fInter >= filas    ? filas    - 1 : fInter);
     cInter = cInter < 0 ? 0 : (cInter >= columnas ? columnas - 1 : cInter);
-    pair<int,int> posInter(fInter, cInter);
-    if (mapa->getCasilla(fInter, cInter).getTipo() != TipoCasilla::Suelo ||
-        mapa->getCasilla(fInter, cInter).getTanque() != nullptr) {
-        int fDir = (fDest > fila) ? 1 : ((fDest < fila) ? -1 : 0);
-        int cDir = (cDest > columna) ? 1 : ((cDest < columna) ? -1 : 0);
-        return avanzarHastaObstaculo(fila, columna, fDir, cDir);
+    if (mapa->getCasilla(fInter, cInter).getTipo() == TipoCasilla::Suelo &&
+        mapa->getCasilla(fInter, cInter).getTanque() == nullptr) {
+        if (lineaVista(fInter, cInter, fDest, cDest) &&
+            mapa->getCasilla(fDest, cDest).getTipo() == TipoCasilla::Suelo &&
+            mapa->getCasilla(fDest, cDest).getTanque() == nullptr)
+            return pair<int,int>(fDest, cDest);
+        int fDir = (fDest > fInter) ? 1 : ((fDest < fInter) ? -1 : 0);
+        int cDir = (cDest > cInter) ? 1 : ((cDest < cInter) ? -1 : 0);
+        return avanzarHastaObstaculo(fInter, cInter, fDir, cDir);
     }
 
-    if (lineaVista(fInter, cInter, fDest, cDest) &&
-        mapa->getCasilla(fDest, cDest).getTipo() == TipoCasilla::Suelo &&
-        mapa->getCasilla(fDest, cDest).getTanque() == nullptr)
-        return pair<int,int>(fDest, cDest);
-    int fDir = (fDest > fInter) ? 1 : ((fDest < fInter) ? -1 : 0);
-    int cDir = (cDest > cInter) ? 1 : ((cDest < cInter) ? -1 : 0);
-    return avanzarHastaObstaculo(fInter, cInter, fDir, cDir);
+    // Si no puede solamente avanza hasta donde sea posible
+    int fDir = (fDest > fila) ? 1 : ((fDest < fila) ? -1 : 0);
+    int cDir = (cDest > columna) ? 1 : ((cDest < columna) ? -1 : 0);
+    return avanzarHastaObstaculo(fila, columna, fDir, cDir);
 }
 
 path pathfinder::decidirMovimiento(Tanque* tanque, pair<int,int> destino, bool powerupPrecision) {
@@ -376,204 +378,4 @@ path pathfinder::decidirMovimiento(Tanque* tanque, pair<int,int> destino, bool p
         }
         return ruta;
     }
-=======
-//
-// Created by j1p2p3a4 on 5/18/2026.
-//
-
-#include "pathfinder.h"
-
-
-
-using path = ArregloDinamico<pair<int,int>>;
-
-pathfinder::pathfinder(Mapa *m) {
-    mapa = m;
-}
-
-int dx[4] = {1, -1, 0, 0};
-int dy[4] = {0, 0, 1, -1};
-bool pathfinder::check_conectividad(pair<int,int> beg, pair<int,int> end) {
-    int filas = mapa ->getFilas();
-    int columnas = mapa -> getColumnas();
-    int ib = beg.first, jb = end.first, ie = end.first, je = end.second;
-    Cola<pair<int,int>> q;
-    bool vis[filas][columnas];
-
-
-    for (int i = 0; i < filas; i++) {
-        for (int j = 0; j < columnas; j++) {
-            vis[i][j] = false;
-        }
-    }
-
-
-
-    q.encolar(beg);
-    vis[ib][jb] = true;
-
-    while (!q.vacia()) {
-        pair<int,int> current = q.frente(); q.desencolar();
-        if (current.first == ib && current.second == je) {
-            vis[ib][je] = true;
-            break;
-        }
-
-        for (int t = 0; t < 4; t++) {
-            int i = current.first + dx[t];
-            int j = current.second + dy[t];
-
-            if (i < 0 || i >= filas || j < 0 || j >= columnas) continue;
-            if (vis[i][j]) continue;
-            if (mapa -> getCasilla(i,j).getTipo() != TipoCasilla::Suelo) continue;
-            if (mapa -> getCasilla(i,j).getTanque() != nullptr) continue;
-
-            vis[i][j] = true;
-            if (i == ib && j == je) {
-                vis[ib][je] = true;
-                break;
-            }
-            pair next(i,j);
-            q.encolar(next);
-
-        }
-
-        if (vis[ib][je]) break;
-    }
-
-
-    return vis[ib][je];
-
-}
-path pathfinder::bfs(pair<int,int> beg, pair<int,int> end) {
-    path p;
-
-    if (!check_conectividad(beg, end)) {
-        return p;
-    }
-
-
-    int filas = mapa -> getFilas();
-    int columnas = mapa -> getColumnas();
-
-    pair<int,int> parent[filas][columnas];
-    bool vis[filas][columnas];
-
-    for (int i = 0; i < filas; i++) {
-        for (int j = 0; j < columnas; j++) {
-            vis[i][j] = false;
-        }
-    }
-
-    Cola<pair<int,int>> q;
-    q.encolar(beg);
-    vis[beg.first][beg.second] = true;
-
-    while (!q.vacia()) {
-        bool found = false;
-        pair<int,int>  current = q.frente(); q.desencolar();
-        for (int t = 0; t < 4; t++) {
-
-            int i = current.first + dx[t], j = current.second + dy[t];
-
-            if (i < 0 || i >= filas || j < 0 || j >= columnas) continue;
-            if (vis[i][j]) continue;
-            if ((mapa -> getCasilla(i,j)).getTipo() != TipoCasilla::Suelo) continue;
-            if (mapa -> getCasilla(i,j).getTanque() != nullptr) continue;
-
-            parent[i][j] = current;
-            vis[i][j] = true;
-            pair next(i, j);
-
-            if (i == end.first && j == end.second) {
-                q.limpiar();
-                found = true;
-                break;
-            }
-            q.encolar(next);
-
-        }
-
-        if (found) {
-            break;
-        }
-
-    }
-
-    pair current(end.first, end.second);
-    while (current.first != beg.first || current.second != beg.second) {
-        p.agregar(current);
-        current = parent[current.first][current.second];
-    }
-    p.agregar(beg);
-    p.reverse();
-
-    return p;
-
-}
-path pathfinder::djikstra(pair<int,int> beg, pair<int,int> end) {
-    path p;
-    bool found = false;
-    if (!check_conectividad(beg, end)) {
-        return p;
-    }
-
-    int filas = mapa -> getFilas();
-    int columnas = mapa -> getColumnas();
-
-    pair<int,int> parent[filas][columnas];
-    bool vis[filas][columnas];
-
-    for (int i = 0; i < filas; i++) {
-        for (int j = 0; j < columnas; j++) {
-            vis[i][j] = false;
-        }
-    }
-
-    priority_queue pq;
-    pair wto(0, beg);
-    pq.push(wto);
-    vis[beg.first][beg.second] = true;
-
-
-    while (!pq.empty()) {
-        pair<int, pair<int,int>> current = pq.top(); pq.pop();
-        for (int t = 0; t < 4; t++) {
-            int i = (current.second).first + dx[t];
-            int j = (current.second).second + dy[t];
-            if (i < 0 || i >= filas || j < 0 || j >= columnas) continue;
-            if (vis[i][j]) continue;
-
-            if (mapa -> getCasilla(i,j).getTipo() != TipoCasilla::Suelo) continue;
-            if (mapa -> getCasilla(i,j).getTanque() != nullptr) continue;
-
-            vis[i][j] = true;
-            parent[i][j] = current.second;
-
-            pair next(current.first + 1, pair(i,j));
-
-            if (i == end.first && j == end.second) {
-                found = true;
-                break;
-            }
-
-            pq.push(next);
-
-        }
-
-        if (found) {
-            break;
-        }
-    }
-
-    pair<int,int> current = end;
-    while (current != beg) {
-        p.agregar(current);
-        current = parent[current.first][current.second];
-    }
-    p.agregar(beg);
-    p.reverse();
-    return p;
-
->>>>>>> origin/main
 }

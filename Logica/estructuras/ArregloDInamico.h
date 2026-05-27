@@ -1,13 +1,11 @@
 #pragma once
 
 template<typename T>
-class ArregloDinamico {
+class ArregloDinamico { // Implementacion de Dynamic Array usada por los algoritmos de pathfinding
 public:
-    ArregloDinamico()
-        : datos(nullptr), cantidad(0), capacidad(0) {}
+    ArregloDinamico() : datos(nullptr), cantidad(0), capacidad(0) {}
 
-    explicit ArregloDinamico(int capacidadInicial)
-        : cantidad(0), capacidad(capacidadInicial) {
+    explicit ArregloDinamico(int capacidadInicial) : cantidad(0), capacidad(capacidadInicial) {
         datos = new T[capacidad];
     }
 
@@ -18,8 +16,7 @@ public:
     ArregloDinamico(const ArregloDinamico&) = delete;
     ArregloDinamico& operator=(const ArregloDinamico&) = delete;
 
-    ArregloDinamico(ArregloDinamico&& otro) noexcept
-        : datos(otro.datos), cantidad(otro.cantidad), capacidad(otro.capacidad) {
+    ArregloDinamico(ArregloDinamico&& otro) noexcept : datos(otro.datos), cantidad(otro.cantidad), capacidad(otro.capacidad) {
         otro.datos = nullptr;
         otro.cantidad = 0;
         otro.capacidad = 0;
@@ -66,7 +63,6 @@ private:
     T* datos;
     int cantidad;
     int capacidad;
-
     void expandir() {
         capacidad = (capacidad == 0) ? 8 : capacidad * 2;
         T* nuevo = new T[capacidad];

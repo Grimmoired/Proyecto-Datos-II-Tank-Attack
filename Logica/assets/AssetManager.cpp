@@ -3,7 +3,7 @@
 #include <sstream>
 #include <stdexcept>
 
-AssetManager& AssetManager::getInstance() {
+AssetManager& AssetManager::getInstance() { // Este script se en carga de precargar todos los assets que el juego necesita, asi no se presentan realentizaciones durante la ejecucion
     static AssetManager instance;
     return instance;
 }
@@ -84,7 +84,7 @@ void AssetManager::loadPowerUps() {
 void AssetManager::loadAudio() {
     const std::vector<std::string> sfxNames = {
         "disparo", "explosion", "danio", "movimiento",
-        "rebote", "powerup", "victoria"
+        "rebote", "powerup", "ganador", "error", "finDePartida"
     };
 
     for (const auto& nombre : sfxNames) {
@@ -94,7 +94,7 @@ void AssetManager::loadAudio() {
         soundBuffers[nombre] = std::move(buf);
     }
 
-    const std::vector<std::string> musicNames = { "menu", "juego", "instrucciones" };
+    const std::vector<std::string> musicNames = { "menu", "juego", "instrucciones", "resultados" };
 
     for (const auto& nombre : musicNames) {
         sf::Music* track = new sf::Music();

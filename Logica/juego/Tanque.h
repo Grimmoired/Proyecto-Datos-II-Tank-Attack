@@ -52,6 +52,18 @@ public:
     void actualizarPosicionSprite(float tamCasilla);
     int getRango() const;
 
+    void registrarDestruccionTanque();
+    void registrarDanioTanque(int cantidad);
+    void registrarDanioObstaculo(int cantidad);
+    void registrarObstaculoDestruido();
+    void registrarPowerUpUsado();
+    void setPosicionSprite(float x, float y);
+    int getTanquesDestruidos()    const;
+    int getDanioTotalTanques()    const;
+    int getDanioTotalObstaculos() const;
+    int getObstaculosDestruidos() const;
+    int getPowerUpsUsados()       const;
+
 private:
     int fila;
     int columna;
@@ -69,4 +81,9 @@ private:
     bool flagPrecisionAtaque;
     sf::Sprite spriteCuerpo;
     float rotacionPorDireccion(DireccionTanque dir) const;
+    int tanquesEnemigosDestruidos;
+    int danioTotalTanques;
+    int danioTotalObstaculos;
+    int obstaculosDestruidos;
+    int powerUpsUsados;
 };

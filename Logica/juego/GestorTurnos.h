@@ -14,6 +14,7 @@ public:
     void setEstado(EstadoJuego estado);
     bool puedeMover() const;
     bool puedeAtacar() const;
+    bool puedePU() const;
     void usarMovimiento();
     void usarAtaque();
     PowerUp* aplicarPowerUpPendiente();

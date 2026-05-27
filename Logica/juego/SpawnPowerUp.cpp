@@ -40,12 +40,10 @@ void SpawnPowerUp::inicializar() {
 bool SpawnPowerUp::posicionValida(int f, int c, Mapa& mapa, Tanque* tanques, int cantTanques) const {
     if (mapa.getCasilla(f, c).getTipo() != TipoCasilla::Suelo) return false;
     if (mapa.getCasilla(f, c).estaOcupada()) return false;
-
     for (int i = 0; i < maxEnMapa; i++)
         if (powerUps[i].activo &&
             powerUps[i].fila == f &&
             powerUps[i].columna == c) return false;
-
     for (int t = 0; t < cantTanques; t++) {
         if (!tanques[t].estaVivo()) continue;
         int tf = tanques[t].getFila();
@@ -102,7 +100,7 @@ void SpawnPowerUp::intentarSpawn(Mapa& mapa, Tanque* tanques, int cantTanques) {
         if (!powerUps[i].activo) { slot = i; break; }
     if (slot == -1) return;
     static std::mt19937 rng(std::random_device{}());
-    std::uniform_int_distribution<int> randF(0, mapa.getFilas()    - 1);
+    std::uniform_int_distribution<int> randF(0, mapa.getFilas() - 1);
     std::uniform_int_distribution<int> randC(0, mapa.getColumnas() - 1);
 
     for (int intento = 0; intento < 200; intento++) {

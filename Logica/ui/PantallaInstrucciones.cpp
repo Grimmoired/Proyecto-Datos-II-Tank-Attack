@@ -81,22 +81,18 @@ void PantallaInstrucciones::inicializar() {
     }
 
     textSecControles = crearTexto("CONTROLES", 38, sf::Color(180, 220, 255), 330, 175);
-    cajaFlechaArriba  = crearCajaTecla(198, 228, 42, 42);
-    labelFlechaArriba = crearLabelTecla("^", cajaFlechaArriba);
-    cajaFlechaIzq  = crearCajaTecla(155, 276, 42, 42);
-    labelFlechaIzq = crearLabelTecla("<", cajaFlechaIzq);
-    cajaFlechaAbajo  = crearCajaTecla(198, 276, 42, 42);
-    labelFlechaAbajo = crearLabelTecla("v", cajaFlechaAbajo);
-    cajaFlechaDer  = crearCajaTecla(246, 276, 42, 42);
-    labelFlechaDer = crearLabelTecla(">", cajaFlechaDer);
-    textMover = crearTexto("Navegar por el mapa y seleccionar\ncasilla de movimiento", 26, sf::Color(210, 200, 170), 335, 242);
-    cajaLMB  = crearCajaTecla(150, 350, 72, 42);
+    textMover = crearTexto("Seleccionar casilla de movimiento (LMB) \n y elegir direccion de disparo (RMB)", 26, sf::Color(210, 200, 170), 335, 242);
+    cajaLMB  = crearCajaTecla(150, 250, 72, 42);
     labelLMB = crearLabelTecla("LMB", cajaLMB);
-    cajaRMB  = crearCajaTecla(230, 350, 72, 42);
+    cajaRMB  = crearCajaTecla(230, 250, 72, 42);
     labelRMB = crearLabelTecla("RMB", cajaRMB);
-    textDisparar = crearTexto( "Confirmar movimiento (LMB)\nconfirmar disparo (RMB)", 26, sf::Color(210, 200, 170), 335, 338);
-    cajaShift  = crearCajaTecla(160, 430, 120, 42);
+    textDisparar = crearTexto( "Seleccionar movimiento (A)\n Seleccionar disparo (S)", 26, sf::Color(210, 200, 170), 335, 338);
+    cajaShift  = crearCajaTecla(165, 430, 120, 42);
     labelShift = crearLabelTecla("SHIFT", cajaShift);
+    cajaA  = crearCajaTecla(165, 340, 53, 55);
+    labelA = crearLabelTecla("A", cajaA);
+    cajaS  = crearCajaTecla(235, 340, 53, 55);
+    labelS = crearLabelTecla("S", cajaS);
     textPowerUp = crearTexto("Usar primer power up en la cola\n en el tanque activo", 26, sf::Color(210, 200, 170), 335, 420);
     textSecReglas = crearTexto("REGLAS", 38, sf::Color(180, 255, 180), 330, 490);
 
@@ -167,14 +163,10 @@ void PantallaInstrucciones::dibujar() {
     ventana.draw(panel);
     ventana.draw(textTitulo);
     ventana.draw(textSecControles);
-    ventana.draw(cajaFlechaArriba);
-    ventana.draw(labelFlechaArriba);
-    ventana.draw(cajaFlechaIzq);
-    ventana.draw(labelFlechaIzq);
-    ventana.draw(cajaFlechaAbajo);
-    ventana.draw(labelFlechaAbajo);
-    ventana.draw(cajaFlechaDer);
-    ventana.draw(labelFlechaDer);
+    ventana.draw(labelA);
+    ventana.draw(cajaA);
+    ventana.draw(labelS);
+    ventana.draw(cajaS);
     ventana.draw(textMover);
     ventana.draw(cajaLMB);
     ventana.draw(labelLMB);

@@ -1,7 +1,7 @@
 #pragma once
 
 template<typename T>
-class Cola {
+class Cola { // Implementacion de Queue usada 
 public:
     Cola() : cabeza(nullptr), fin(nullptr), cantidad(0) {}
     ~Cola() { limpiar(); }
@@ -20,11 +20,11 @@ public:
     Cola& operator=(Cola&& otra) noexcept {
         if (this == &otra) return *this;
         limpiar();
-        cabeza        = otra.cabeza;
-        fin           = otra.fin;
-        cantidad      = otra.cantidad;
-        otra.cabeza   = nullptr;
-        otra.fin      = nullptr;
+        cabeza = otra.cabeza;
+        fin = otra.fin;
+        cantidad = otra.cantidad;
+        otra.cabeza = nullptr;
+        otra.fin = nullptr;
         otra.cantidad = 0;
         return *this;
     }
@@ -42,8 +42,8 @@ public:
 
     T desencolar() {
         Nodo* tmp = cabeza;
-        T valor   = tmp->dato;
-        cabeza    = cabeza->siguiente;
+        T valor = tmp->dato;
+        cabeza = cabeza->siguiente;
         if (cabeza == nullptr) fin = nullptr;
         delete tmp;
         cantidad--;
@@ -51,25 +51,25 @@ public:
     }
     
     const T& frente() const { return cabeza->dato; }
-    bool vacia()   const { return cantidad == 0; }
-    int  size()    const { return cantidad; }
+    bool vacia() const { return cantidad == 0; }
+    int  size() const { return cantidad; }
     void limpiar() {
         while (cabeza != nullptr) {
             Nodo* tmp = cabeza;
             cabeza    = cabeza->siguiente;
             delete tmp;
         }
-        fin      = nullptr;
+        fin = nullptr;
         cantidad = 0;
     }
 
 private:
     struct Nodo {
-        T     dato;
+        T dato;
         Nodo* siguiente;
         explicit Nodo(const T& d) : dato(d), siguiente(nullptr) {}
     };
     Nodo* cabeza;
     Nodo* fin;
-    int   cantidad;
+    int cantidad;
 };

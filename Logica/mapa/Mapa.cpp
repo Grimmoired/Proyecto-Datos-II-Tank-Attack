@@ -26,10 +26,7 @@ void Mapa::inicializarCasillas() {
 }
 
 static bool esZonaSpawn(int f, int c, int filas, int columnas) {
-    return (f < 2 && c < 2)                     ||
-           (f < 2 && c >= columnas - 2)          ||
-           (f >= filas - 2 && c < 2)             ||
-           (f >= filas - 2 && c >= columnas - 2);
+    return (f < 2 && c < 2) || (f < 2 && c >= columnas - 2) || (f >= filas - 2 && c < 2) || (f >= filas - 2 && c >= columnas - 2);
 }
 
 bool Mapa::posicionEstrategicaParaBarril(int f, int c) const {
@@ -54,8 +51,8 @@ void Mapa::colocarObstaculos() {
         for (int c = 0; c < columnas; c++)
             casillas[f][c].setTipo(TipoCasilla::Suelo);
     std::uniform_real_distribution<float> prob(0.0f, 1.0f);
-    const float probObstaculo        = 0.12f;
-    const float probDestruibleDebil  = 0.07f;
+    const float probObstaculo = 0.12f;
+    const float probDestruibleDebil = 0.07f;
     const float probDestruibleFuerte = 0.06f;
     for (int f = 0; f < filas; f++) {
         for (int c = 0; c < columnas; c++) {
@@ -99,9 +96,9 @@ void Mapa::bfsConectividad(int fIniciales, int cIniciales, bool** visitado) cons
     int* colaF = new int[filas * columnas];
     int* colaC = new int[filas * columnas];
     int cabeza = 0;
-    int fin    = 0;
-    colaF[fin]   = fIniciales;
-    colaC[fin]   = cIniciales;
+    int fin = 0;
+    colaF[fin] = fIniciales;
+    colaC[fin] = cIniciales;
     fin++;
     visitado[fIniciales][cIniciales] = true;
     const int df[] = {-1, 1, 0, 0};

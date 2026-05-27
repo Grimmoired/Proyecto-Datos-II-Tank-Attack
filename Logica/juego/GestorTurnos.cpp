@@ -12,7 +12,7 @@ void GestorTurnos::construirOrden() {
     int c1 = 0, c2 = 0;
     for (int i = 0; i < cantidad; i++) {
         if (tanques[i].getJugador() == 1) j1[c1++] = i;
-        else                              j2[c2++] = i;
+        else j2[c2++] = i;
     }
     cantidadTurnos = 0;
     int maxPares = c1 < c2 ? c1 : c2;
@@ -118,6 +118,7 @@ bool GestorTurnos::puedeAtacar() const {
     return estado == EstadoJuego::esperandoAccion || estado == EstadoJuego::movimientoUsado;
 }
 
+
 Tanque* GestorTurnos::getTanqueActual() {
     return &tanques[ordenTurnos[turnoActual]];
 }
@@ -129,6 +130,7 @@ int GestorTurnos::getJugadorActual() const {
 bool GestorTurnos::powerUpUsado() {
     Tanque* t = getTanqueActual();
     if (!t->consumirPowerUp()) return false;
+    t->registrarPowerUpUsado();
     estado = EstadoJuego::ambasAccionesUsadas;
     return true;
 }
